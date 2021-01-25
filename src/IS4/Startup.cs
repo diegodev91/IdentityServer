@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using IdentityServer4.Test;
 
 namespace IS4
 {
@@ -26,6 +27,13 @@ namespace IS4
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentityServer()
+            .AddInMemoryClients(Config.GetClients())
+            .AddInMemoryIdentityResources(Config.GetIdentityResources())
+            .AddInMemoryApiResources(Config.GetApis())
+            .AddInMemoryApiScopes(Config.GetApiScopes())
+            .AddTestUsers(TestUsers.Users)
+            .AddDeveloperSigningCredential();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -47,6 +55,8 @@ namespace IS4
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseIdentityServer();
 
             app.UseAuthorization();
 
