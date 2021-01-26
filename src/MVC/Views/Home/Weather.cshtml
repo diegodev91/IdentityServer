@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Weather";
+}
+@model List<MVC.Models.WeatherData>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Temperature</th>
+      <th>TemperatureF</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+      @foreach (var item in Model)
+{
+    <tr>
+      <th>@Html.DisplayFor(modelItem => item.Date)</th>
+      <td>@Html.DisplayFor(modelItem => item.Temperature)</td>
+      <td>@Html.DisplayFor(modelItem => item.TemperatureF)</td>
+      <td>@Html.DisplayFor(modelItem => item.Summary)</td>
+    </tr>
+}
+  </tbody>
+</table>
