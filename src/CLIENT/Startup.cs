@@ -26,6 +26,11 @@ namespace src
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("Bearer")
+            .AddIdentityServerAuthentication("Bearer", opt => {
+                opt.ApiName = "api";
+                opt.Authority = "https://localhost:5001";
+            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -47,6 +52,8 @@ namespace src
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
