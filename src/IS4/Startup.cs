@@ -12,6 +12,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using IdentityServer4.Test;
+using Microsoft.AspNetCore.Identity;
+using System.Reflection;
+using Npgsql;
+using Microsoft.EntityFrameworkCore;
 
 namespace IS4
 {
@@ -27,11 +31,16 @@ namespace IS4
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentityServer()
-            .AddInMemoryClients(Config.GetClients())
-            .AddInMemoryIdentityResources(Config.GetIdentityResources())
-            .AddInMemoryApiResources(Config.GetApis())
-            .AddInMemoryApiScopes(Config.GetApiScopes())
+            var cn = Configuration.GetConnectionString("DefaultConnection");
+            var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
+            services.AddIdentityServer()            
+            .AddConfigurationStore((options) => {
+                options.ConfigureDbContext = x => x.UseNpgsql(cn, options => options.MigrationsAssembly(migrationAssembly));
+            })
+            .AddOperationalStore(options => {
+                options.ConfigureDbContext = x => x.UseNpgsql(cn, options => options.MigrationsAssembly(migrationAssembly));
+            })
             .AddTestUsers(TestUsers.Users)
             .AddDeveloperSigningCredential();
 

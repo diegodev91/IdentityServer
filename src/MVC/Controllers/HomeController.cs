@@ -12,6 +12,7 @@ using MVC.Services;
 using IdentityModel.Client;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MVC.Controllers
 {
@@ -43,6 +44,7 @@ namespace MVC.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [Authorize]
         public async Task<IActionResult> Weather(){
             var data = new List<WeatherData>();
             var apiUrl = "https://localhost:5002";
