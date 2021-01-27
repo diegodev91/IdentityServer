@@ -58,137 +58,157 @@ public class Config
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api", "api.scope1", "api.scope2", "scope2", "policyserver.runtime", "policyserver.management" },
-                },
-                new Client
-                {
-                    ClientId = "m2m.short",
-                    ClientName = "Machine to machine with short access token lifetime (client credentials)",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api", "api.scope1", "api.scope2", "scope2" },
-                    AccessTokenLifetime = 75
-                },
-
-                // interactive
-                new Client
-                {
-                    ClientId = "interactive.confidential",
-                    ClientName = "Interactive client (Code with PKCE)",
-
-                    RedirectUris = { "https://notused" },
-                    PostLogoutRedirectUris = { "https://notused" },
-
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
-
-                    AllowOfflineAccess = true,
-                    RefreshTokenUsage = TokenUsage.ReUse,
-                    RefreshTokenExpiration = TokenExpiration.Sliding
-                },
-                new Client
-                {
-                    ClientId = "interactive.confidential.short",
-                    ClientName = "Interactive client with short token lifetime (Code with PKCE)",
-
-                    RedirectUris = { "https://notused" },
-                    PostLogoutRedirectUris = { "https://notused" },
-
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-                    RequireConsent = false,
-
-                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                    RequirePkce = true,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
-
-                    AllowOfflineAccess = true,
-                    RefreshTokenUsage = TokenUsage.ReUse,
-                    RefreshTokenExpiration = TokenExpiration.Sliding,
-                    
-                    AccessTokenLifetime = 75
-                },
-
-                new Client
-                {
-                    ClientId = "interactive.public",
-                    ClientName = "Interactive client (Code with PKCE)",
-
-                    RedirectUris = { "https://notused" },
-                    PostLogoutRedirectUris = { "https://notused" },
-
-                    RequireClientSecret = false,
-
-                    AllowedGrantTypes = GrantTypes.Code,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
-
-                    AllowOfflineAccess = true,
-                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
-                    RefreshTokenExpiration = TokenExpiration.Sliding
-                },
-                new Client
-                {
-                    ClientId = "interactive.public.short",
-                    ClientName = "Interactive client with short token lifetime (Code with PKCE)",
-
-                    RedirectUris = { "https://notused" },
-                    PostLogoutRedirectUris = { "https://notused" },
-
-                    RequireClientSecret = false,
-
-                    AllowedGrantTypes = GrantTypes.Code,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
-
-                    AllowOfflineAccess = true,
-                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
-                    RefreshTokenExpiration = TokenExpiration.Sliding,
-                    
-                    AccessTokenLifetime = 75
-                },
-
-                new Client
-                {
-                    ClientId = "device",
-                    ClientName = "Device Flow Client",
-
-                    AllowedGrantTypes = GrantTypes.DeviceFlow,
-                    RequireClientSecret = false,
-
-                    AllowOfflineAccess = true,
-                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
-                    RefreshTokenExpiration = TokenExpiration.Sliding,
-                    
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" }
+                    AllowedScopes = { "weatherapi.read", "weatherapi.write" },
                 },
                 
-                // oidc login only
-                new Client
-                {
-                    ClientId = "login",
+                // interactive client using code flow + pkce
+        new Client
+        {
+          ClientId = "interactive",
+          ClientSecrets = {new Secret("SuperSecretPassword".Sha256())},
+
+          AllowedGrantTypes = GrantTypes.Code,
+
+          RedirectUris = {"https://localhost:5001/signin-oidc"},
+          FrontChannelLogoutUri = "https://localhost:5001/signout-oidc",
+          PostLogoutRedirectUris = {"https://localhost:5001/signout-callback-oidc"},
+
+          AllowOfflineAccess = true,
+          AllowedScopes = {"openid", "profile", "weatherapi.read"},
+          RequirePkce = true,
+          RequireConsent = true,
+          AllowPlainTextPkce = false
+        },
+
+                // new Client
+                // {
+                //     ClientId = "m2m.short",
+                //     ClientName = "Machine to machine with short access token lifetime (client credentials)",
+                //     ClientSecrets = { new Secret("secret".Sha256()) },
+
+                //     AllowedGrantTypes = GrantTypes.ClientCredentials,
+                //     AllowedScopes = { "api", "api.scope1", "api.scope2", "scope2" },
+                //     AccessTokenLifetime = 75
+                // },
+
+                // // interactive
+                // new Client
+                // {
+                //     ClientId = "interactive.confidential",
+                //     ClientName = "Interactive client (Code with PKCE)",
+
+                //     RedirectUris = { "https://notused" },
+                //     PostLogoutRedirectUris = { "https://notused" },
+
+                //     ClientSecrets = { new Secret("secret".Sha256()) },
+
+                //     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                //     AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
+
+                //     AllowOfflineAccess = true,
+                //     RefreshTokenUsage = TokenUsage.ReUse,
+                //     RefreshTokenExpiration = TokenExpiration.Sliding
+                // },
+                // new Client
+                // {
+                //     ClientId = "interactive.confidential.short",
+                //     ClientName = "Interactive client with short token lifetime (Code with PKCE)",
+
+                //     RedirectUris = { "https://notused" },
+                //     PostLogoutRedirectUris = { "https://notused" },
+
+                //     ClientSecrets = { new Secret("secret".Sha256()) },
+                //     RequireConsent = false,
+
+                //     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                //     RequirePkce = true,
+                //     AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
+
+                //     AllowOfflineAccess = true,
+                //     RefreshTokenUsage = TokenUsage.ReUse,
+                //     RefreshTokenExpiration = TokenExpiration.Sliding,
                     
-                    RedirectUris = { "https://notused" },
-                    PostLogoutRedirectUris = { "https://notused" },
+                //     AccessTokenLifetime = 75
+                // },
+
+                // new Client
+                // {
+                //     ClientId = "interactive.public",
+                //     ClientName = "Interactive client (Code with PKCE)",
+
+                //     RedirectUris = { "https://notused" },
+                //     PostLogoutRedirectUris = { "https://notused" },
+
+                //     RequireClientSecret = false,
+
+                //     AllowedGrantTypes = GrantTypes.Code,
+                //     AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
+
+                //     AllowOfflineAccess = true,
+                //     RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                //     RefreshTokenExpiration = TokenExpiration.Sliding
+                // },
+                // new Client
+                // {
+                //     ClientId = "interactive.public.short",
+                //     ClientName = "Interactive client with short token lifetime (Code with PKCE)",
+
+                //     RedirectUris = { "https://notused" },
+                //     PostLogoutRedirectUris = { "https://notused" },
+
+                //     RequireClientSecret = false,
+
+                //     AllowedGrantTypes = GrantTypes.Code,
+                //     AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
+
+                //     AllowOfflineAccess = true,
+                //     RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                //     RefreshTokenExpiration = TokenExpiration.Sliding,
                     
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowedScopes = { "openid", "profile", "email" },
-                },
+                //     AccessTokenLifetime = 75
+                // },
+
+                // new Client
+                // {
+                //     ClientId = "device",
+                //     ClientName = "Device Flow Client",
+
+                //     AllowedGrantTypes = GrantTypes.DeviceFlow,
+                //     RequireClientSecret = false,
+
+                //     AllowOfflineAccess = true,
+                //     RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                //     RefreshTokenExpiration = TokenExpiration.Sliding,
+                    
+                //     AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" }
+                // },
                 
-                new Client
-                {
-                    ClientId = "hybrid",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
+                // // oidc login only
+                // new Client
+                // {
+                //     ClientId = "login",
                     
-                    AllowedGrantTypes = GrantTypes.Hybrid,
-                    RequirePkce = false,
+                //     RedirectUris = { "https://localhost:5001" },
+                //     PostLogoutRedirectUris = { "https://localhost:5001" },
+                    
+                //     AllowedGrantTypes = GrantTypes.Implicit,
+                //     AllowedScopes = { "openid", "profile", "email" },
+                // },
+                
+                // new Client
+                // {
+                //     ClientId = "hybrid",
+                //     ClientSecrets = { new Secret("secret".Sha256()) },
+                    
+                //     AllowedGrantTypes = GrantTypes.Hybrid,
+                //     RequirePkce = false,
 
-                    RedirectUris = { "https://notused" },
-                    PostLogoutRedirectUris = { "https://notused" },
+                //     RedirectUris = { "https://notused" },
+                //     PostLogoutRedirectUris = { "https://notused" },
 
-                    AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" }
-                }
+                //     AllowOfflineAccess = true,
+                //     AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" }
+                // }
             };
         }
     }

@@ -34,7 +34,16 @@ namespace IS4
             var cn = Configuration.GetConnectionString("DefaultConnection");
             var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-            services.AddIdentityServer()            
+
+            services.AddDbContext<ApplicationDbContext>((options) => {
+                options.UseNpgsql(cn, options => options.MigrationsAssembly(migrationAssembly));
+            });
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddIdentityServer()   
+            .AddAspNetIdentity<IdentityUser>()         
             .AddConfigurationStore((options) => {
                 options.ConfigureDbContext = x => x.UseNpgsql(cn, options => options.MigrationsAssembly(migrationAssembly));
             })
