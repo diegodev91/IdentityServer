@@ -24,8 +24,7 @@ namespace MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<IdentityServerSettings>(Configuration.GetSection("IdentityServerSettings"));
-            services.AddSingleton<ITokenService, TokenService>();
+           
             services.AddControllersWithViews();
 
             services.AddAuthentication(opt => {
@@ -33,15 +32,19 @@ namespace MVC
                 opt.DefaultChallengeScheme = "oicd";
             }).AddCookie("cookie")
             .AddOpenIdConnect("oicd", options => {
-                options.Authority = Configuration["IdentityServerSettings:AuthorityUrl"];
-                options.ClientId = Configuration["IdentityServerSettings:ClientId"];
-                options.ClientSecret = Configuration["IdentityServerSettings:ClientSecret"];
+                options.Authority = Configuration["InteractiveServiceSettings:AuthorityUrl"];
+                options.ClientId = Configuration["InteractiveServiceSettings:ClientId"];
+                options.ClientSecret = Configuration["InteractiveServiceSettings:ClientSecret"];
                 options.ResponseType = "code";
                 options.UsePkce =  true;
                 options.ResponseMode = "query";
-                options.Scope.Add(Configuration["IdentityServerSettings:Scope"]);
+                options.Scope.Add(Configuration["InteractiveServiceSettings:Scopes"]);
+
                 options.SaveTokens = true;
             });
+
+            services.Configure<IdentityServerSettings>(Configuration.GetSection("IdentityServerSettings"));
+            services.AddSingleton<ITokenService, TokenService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +63,7 @@ namespace MVC
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
+            app.UseRouting(); 
 
             app.UseAuthentication();
             app.UseAuthorization();
