@@ -29,7 +29,7 @@ namespace IS4
                 ClientSecrets = {
                     new Secret("secret".Sha256())
                 },
-                AllowedScopes = { "api1 "}
+                AllowedScopes = { "api1"}
             } };
     }
 }
