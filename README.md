@@ -1,6 +1,6 @@
 # IdentityServer minimun configuration.
 
-## IS$
+## IS4
 
 https://localhost:5001/.well-known/openid-configuration
 
